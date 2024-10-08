@@ -12,11 +12,16 @@ export default class AtivoService
         return ativo;
     }
 
-    public async newAtivo(ativo: {ticket: string, tipo: string}): Promise<Object>
+    public async newAtivo(ativo: {ticket: string, tipo: string}): Promise<Object | string>
     {
-        await this.ativoModel.newAtivo(ativo);
         const verificacao = await this.ativoModel.getAtivoTicket(ativo.ticket);
-        return verificacao;
+        if(!verificacao)
+        {
+            await this.ativoModel.newAtivo(ativo);
+            const verificacao = await this.ativoModel.getAtivoTicket(ativo.ticket);
+            return verificacao;
+        }
+        return "Ja existe"
     }
 
     public async ativosTipo(tipo: string): Promise<Object>

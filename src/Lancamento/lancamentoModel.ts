@@ -1,6 +1,6 @@
 import RegisterDB from "../config/dbConnect";
 
-interface Lancamento 
+export interface Lancamento 
 {
     ativo: number; user: number;
     quantidade: number; preco: number;
@@ -15,12 +15,15 @@ export default class LancamentoModel
     {
         const query = `SELECT 
                             l.id AS lancamento_id,
-                            u.name AS usuario_nome,
-                            a.ticket AS ativo_ticket,
+                            a.ticket AS ticket,
+                            a.tipo AS tipo,
                             l.quantidade,
                             l.preco,
                             l.data,
-                            l.compra
+                            CASE 
+                                WHEN l.compra = true THEN 'compra'
+                                ELSE 'venda'
+                            END AS operacao
                         FROM 
                             lancamento l
                         JOIN 
@@ -37,7 +40,7 @@ export default class LancamentoModel
     public async newLancamento(newLancamento: Lancamento)
     {
         const query = `INSERT INTO lancamento (id_ativo, id_usuario, quantidade, preco, data, compra)
-                       VALUES ($1, $2, $3, $4, $5)
+                       VALUES ($1, $2, $3, $4, $5, $6)
                         `;
         await this.registerDB.query(query, 
             [

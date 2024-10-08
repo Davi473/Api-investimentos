@@ -1,3 +1,4 @@
+import { stringify } from "querystring";
 import AtivoService from "./ativoService";
 import express from "express"
 
@@ -9,8 +10,13 @@ export default class AtivoController
     public newAtivo = async (ativo: {ticket: string, tipo: string}, res: express.Response) =>
     {
         try {
+            console.log(ativo);
             const ativoNew = await this.ativoService.newAtivo(ativo);
-            res.status(201).json({ message: "Ativo adicionado", ativo: ativoNew});
+            if(ativoNew == stringify)
+            {
+                res.status(201).json({ message: "Ativo adicionado", ativo: ativoNew});
+            }
+            res.status(201).json({ message: ativoNew});
         } catch (err: any) {
             res.status(500).json({ message: `${err.message} - Erro em adiciconar o novo ativo`});
         }

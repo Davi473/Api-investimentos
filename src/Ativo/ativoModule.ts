@@ -18,12 +18,12 @@ export default class AtivoModules
         this.ativoModel = new AtivoModel(this.registerDB);
         this.ativoService = new AtivoService(this.ativoModel);
         this.ativoController = new AtivoController(this.ativoService);
-        this.ativoRouter = new AtivoRouter(this.ativoController, this.token);
+        this.ativoRouter = new AtivoRouter(this.ativoController);
         this.app.use(express.json(), this.ativoRouter.routes);
     }
 
 
-    public getAtivoModel = () => 
+    public getAtivoModel (): AtivoModel
     {
         return this.ativoModel;
     }

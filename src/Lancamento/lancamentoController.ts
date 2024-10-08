@@ -1,5 +1,5 @@
 import LancamentoService from "./lancamentoService";
-
+import ExcelService from "../Excel/excelService";
 
 export default class LancamentoController
 {
@@ -18,10 +18,26 @@ export default class LancamentoController
 
     public async newLancamento(req: any, res: any)
     {
-        console.log(req.body);
-        console.log(req.user)
-        //const newLancamento = {ativo.}
-        //await this.lancamentoService.newLancamento();
-        res.status(201).json({ message: "Adicionado Com Sucesso"});
+        try {
+            const { ticket, quantidade, preco, data, compra } = req.body;
+            const { id, name } = req.user;
+            const newLancamento = {ticket: ticket, user: id, quantidade: quantidade, preco: preco, data: data, compra: compra}
+            await this.lancamentoService.newLancamento(newLancamento);
+            res.status(201).json({ message: "Adicionado Com Sucesso"});
+        } catch (err: any) {
+            res.status(500).json({ message: `${err.message} -- falha no momento de adicionar` });
+        }
+    }
+    
+    public async excelLancamento(req: any, res: any)
+    {
+        try {
+            const {id} = req.user;
+            const colunas = await this.lancamentoService.gerarExcel(id);
+            await new ExcelService().gerarExcel(colunas[0], colunas[1], res);
+            res.end();
+        } catch (err: any) {
+            res.status(500).json({ message: `${err.message} - falha no excel`})
+        }
     }
 }
