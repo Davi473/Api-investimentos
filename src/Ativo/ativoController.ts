@@ -31,27 +31,7 @@ export default class AtivoController
             res.status(500).json({ message: `${err.message} - falha na requisição dos ativos`});
         }
     }
-
-    public ativoTicket = async (ticket: string, res: express.Response) =>
-    {
-        try {
-            const ativoTicket = await this.ativoService.ativoTicket(ticket);
-            res.status(200).json({ message: "Ativo", ativo: ativoTicket});
-        } catch (err: any) {
-            res.status(500).json({ message: `${err.message} - falha na requisição dos ticket`})
-        }
-    }
-
-    public ativosTipo = async (tipo: string, res: express.Response) =>
-    {
-        try {
-            const ativosTipo = await this.ativoService.ativosTipo(tipo);
-            res.status(200).json({ message: "Tipos de ativo", ativo: ativosTipo });
-        } catch (err: any) {
-            res.status(500).json({ message: `${err.message} - falha na requisição do tipo`});
-        }
-    }
-
+    
     public ativoAtualizado = async (ativo: {ticket: string, tipo: string, id: number}, res: express.Response) =>
     {
         try {

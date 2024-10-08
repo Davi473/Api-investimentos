@@ -36,7 +36,7 @@ export default class CarteiraModel
 
     public async newCarteira(carteira: Carteira)
     {
-        const query = `INSERT INTO ativo_carteiro (id_ativo, id_usuario, quantidade, media)
+        const query = `INSERT INTO ativo_carteira (id_ativo, id_usuario, quantidade, media)
                        VALUES ($1, $2, $3, $4)
                         `;
         await this.registerDB.query(query, 

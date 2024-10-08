@@ -22,8 +22,8 @@ export default class LancamentoController
             const { ticket, quantidade, preco, data, compra } = req.body;
             const { id, name } = req.user;
             const newLancamento = {ticket: ticket, user: id, quantidade: quantidade, preco: preco, data: data, compra: compra}
-            await this.lancamentoService.newLancamento(newLancamento);
-            res.status(201).json({ message: "Adicionado Com Sucesso"});
+            const lancamento = await this.lancamentoService.newLancamento(newLancamento);
+            res.status(lancamento[0]).json(lancamento[1]);
         } catch (err: any) {
             res.status(500).json({ message: `${err.message} -- falha no momento de adicionar` });
         }

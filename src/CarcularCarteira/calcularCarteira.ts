@@ -12,26 +12,47 @@ export default class Media
     ) {
         this.quantidade = 0;
         this.precoMedio = 0;
-        this.getConsolidado();
+        this.calcularMedia();
     }
 
-    private getConsolidado(): void
-    { 
-        if(this.lancamento.compra == true)
+    private calcularMedia()
+    {
+        if(this.lancamento.compra === true)
         {
-            this.quantidade = this.carteira.quantidade + this.lancamento.quantidade;
-            const valorTotalCarteira = this.carteira.quantidade * this.carteira.media;
-            const valorTotalLancamento = this.lancamento.quantidade * this.lancamento.preco;
-            const mediaTotal = (valorTotalCarteira + valorTotalLancamento) / this.quantidade;
-            this.precoMedio = mediaTotal;
+            this.fazerSoma();
         } else {
-            this.quantidade = this.carteira.quantidade - this.lancamento.quantidade;
-            const valorTotalCarteira = this.carteira.quantidade * this.carteira.media;
-            const valorTotalLancamento = this.lancamento.quantidade * this.lancamento.preco;
-            const mediaTotal = (valorTotalCarteira - valorTotalLancamento) / this.quantidade;
-            this.precoMedio = mediaTotal;
+            this.fazerSubtracao();
+            
+            if(this.quantidade <= 0)
+            {
+                this.zerar();
+            }
         }
-    }   
+    }
+
+    private fazerSubtracao()
+    {
+        this.quantidade = this.carteira.quantidade - this.lancamento.quantidade;
+        const valorTotalCarteira = this.carteira.quantidade * this.carteira.media;
+        const valorTotalLancamento = this.lancamento.quantidade * this.lancamento.preco;
+        const mediaTotal = (valorTotalCarteira - valorTotalLancamento) / this.quantidade;
+        this.precoMedio = mediaTotal;
+    }
+
+    private fazerSoma()
+    {
+        this.quantidade = this.carteira.quantidade + this.lancamento.quantidade;
+        const valorTotalCarteira = this.carteira.quantidade * this.carteira.media;
+        const valorTotalLancamento = this.lancamento.quantidade * this.lancamento.preco;
+        const mediaTotal = (valorTotalCarteira + valorTotalLancamento) / this.quantidade;
+        this.precoMedio = mediaTotal;
+    }
+
+    private zerar()
+    {
+        this.quantidade = 0;
+        this.precoMedio = 0;
+    }
 
     public media()
     {

@@ -26,24 +26,48 @@ export default class LancamentoService
             }
     ) {
         const id_ativo = await this.ativoModel.getAtivoTicket(lancamento.ticket);
+        if(!id_ativo)
+        {
+            return [301, {message: "Esse ativo não existe"}]
+        }
+
         const carteiraExist = await this.carteriraModel.getCarteiraTicket(id_ativo.id, lancamento.user);
         const newLancamento = {
             ativo: id_ativo.id, user: lancamento.user, quantidade: lancamento.quantidade,
             preco: lancamento.preco, data: lancamento.data, compra: lancamento.compra
         }
 
-        await this.lancamentoModel.newLancamento(newLancamento);
         if(!!carteiraExist)
         {
-            const valoresDeMedia = new Media(carteiraExist, newLancamento);
-        }
-
-        await this.carteriraModel.newCarteira(
+            if(!(lancamento.compra === false && carteiraExist.quantidade === 0))
             {
-                ativo: id_ativo.id, usuario: lancamento.user, 
-                quantidade: lancamento.quantidade, media: lancamento.preco
-            });
-        
+                const valoresDeMedia = new Media(carteiraExist, newLancamento);
+                const media = valoresDeMedia.media();
+
+                await this.lancamentoModel.newLancamento(newLancamento);
+                await this.carteriraModel.updateCarteira(
+                    {
+                        ativo: id_ativo.id, usuario: lancamento.user,
+                        quantidade: media.quantidade, media: media.media
+                    });
+
+            } else {
+
+                return [301, {message: "Você não pode adicinar uma venda sem ativos na carteira"}];
+
+            }   
+
+        } else  {
+
+            await this.carteriraModel.newCarteira(
+                {
+                    ativo: id_ativo.id, usuario: lancamento.user, 
+                    quantidade: lancamento.quantidade, media: lancamento.preco
+                });  
+        }
+        const carteiraAtual = await this.carteriraModel.getCarteiraTicket(id_ativo.id, lancamento.user);
+        return [201, {message: "Media do ativo atualmente", carteria: carteiraAtual}];
+
     }
 
     public async gerarExcel(user: number): Promise<[Object[], Object[]]>

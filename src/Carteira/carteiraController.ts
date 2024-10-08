@@ -14,4 +14,14 @@ export default class carteiraController
             res.status(500).json({ message: `${err.message} -- falha na requisição` });
         }
     }
+    /*
+    public gerarExcel(req: any res: any)
+    {
+        try {
+
+        } catch (err: any) {
+
+        }
+    }
+    */
 }
