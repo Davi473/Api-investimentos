@@ -32,10 +32,13 @@ export default class LancamentoController
     public async excelLancamento(req: any, res: any)
     {
         try {
-            const {id} = req.user;
+            const {id} =  { id: 1};//req.user;
             const colunas = await this.lancamentoService.gerarExcel(id);
-            await new ExcelService().gerarExcel(colunas[0], colunas[1], res);
-            res.end();
+            const excel = await new ExcelService().gerarExcel(colunas);
+            //await new ExcelService().gerarExcel(colunas[0], colunas[1], res);
+            res.setHeader('Content-Disposition', 'attachment; filename="dados.xlsx"');
+            res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            res.status(200).send(excel);
         } catch (err: any) {
             res.status(500).json({ message: `${err.message} - falha no excel`})
         }

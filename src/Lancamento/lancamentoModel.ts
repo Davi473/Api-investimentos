@@ -14,7 +14,7 @@ export default class LancamentoModel
     public async getLancamento(id: number)
     {
         const query = `SELECT 
-                            l.id AS lancamento_id,
+                            l.id AS id,
                             a.ticket AS ticket,
                             a.tipo AS tipo,
                             l.quantidade,
