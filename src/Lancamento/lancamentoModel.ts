@@ -48,4 +48,10 @@ export default class LancamentoModel
                 newLancamento.preco, newLancamento.data, newLancamento.compra
             ]);
     }
+
+    public async deleteLancamento(id: number, id_user: number, id_ativo: number)
+    {
+        const query = `DELETE FROM lancamento WHERE id = $1 AND id_user = $2 AND id_ativo = $3`;
+        await this.registerDB.query(query, [id, id_user, id_ativo]);
+    }
 }

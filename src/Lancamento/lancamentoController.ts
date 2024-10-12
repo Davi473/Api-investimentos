@@ -43,4 +43,16 @@ export default class LancamentoController
             res.status(500).json({ message: `${err.message} - falha no excel`})
         }
     }
+
+    public async deleteLancamento(req: any, res: any)
+    {
+        try {
+            const id_user = req.user.id;
+            const {id, ticket} = req.body;
+            await this.lancamentoService.deleteLancamento(ticket, id_user, id);
+            res.status(201).json({ message: "Deletedo com sucesso"});
+        } catch (err: any) {
+            res.status(500).json({ message: `${err.message} -- falha ao deletar`});
+        }
+    }
 }

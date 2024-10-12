@@ -75,4 +75,11 @@ export default class LancamentoService
         const lancamentos = await this.lancamentoModel.getLancamento(user);
         return lancamentos
     }
+
+    public async deleteLancamento(ticket: string, id_user: number, id: number)
+    {
+        const id_ativo = await this.ativoModel.getAtivoTicket(ticket);
+        await this.lancamentoModel.deleteLancamento(id, id_user, id_ativo);
+        
+    }
 }

@@ -12,5 +12,6 @@ export default class LancamentoRouter
         this.routes.get("/lancamento", this.token.authToken, (req: Request, res: Response) =>  {this.lancamentoController.getLancamento(req, res)});
         this.routes.post("/lancamento", this.token.authToken, (req: Request, res: Response) => {this.lancamentoController.newLancamento(req, res)});
         this.routes.get("/lancamento/excel", this.token.authToken, (req: Request, res: Response) => {this.lancamentoController.excelLancamento(req, res)});
+        this.routes.delete("/lancamento", this.token.authToken, (req: Request, res: Response) => {this.lancamentoController.deleteLancamento(req, res)});
     }
 }
